@@ -1,0 +1,59 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>City Finder</title>
+        <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+        <script> 
+        
+        //LAST PIECE OF THE ASSIGNMENT
+        $(document).ready(function() {
+          $("#weatherButton").click(function(e){
+            var value = $("#cityField").val();
+            console.log(value);
+            $("#dispalyCity").text(value);
+            e.preventDefault();
+            var myurl = "https://api.openweathermap.org/data/2.5/weather?units=imperial&appid=7dfafa87623620c7116fcd47d27548f2&q="
+            myurl += value;
+            //$("#txtHint").text("Keyup "+ $("#cityField").val());
+            console.log(myurl);
+            $.ajax({
+              url:myurl,
+              dataType: "json",
+              success : function(parsed_json) {
+                    var location = parsed_json['name'];
+                    var weather = parsed_json['weather'][0]['main'];
+                    var temp = parsed_json['main']['temp'];
+                    var weather_icon = parsed_json['weather'][0]['icon'];
+                    var humidity = parsed_json['main']['humidity'];
+                    var temp_min = parsed_json['main']['temp_min'];
+                    var temp_max = parsed_json['main']['temp_max'];
+                    var wind_speed = parsed_json['wind']['speed'];
+                    everything = "<img src=\"http://openweathermap.org/img/w/" + weather_icon + ".png\"/>"
+                    everything += "<ul>";
+                    everything += "<li>Location: " + location;
+                    everything += "<li>Weather: " + weather + " (" + temp + "&#8457;)";
+                    everything += "<li>Low: " + temp_min + "&#8457; | High: " + temp_max + "&#8457;";
+                    everything += "<li>Humidity: " + humidity + "%";
+                    everything += "<li>Wind: " + wind_speed + " mph";
+                    everything += "</ul>";
+                    $("#weather").html(everything);
+              }
+            });
+          });
+        });
+        </script>
+    </head>
+    <body>
+    <form>
+        Enter The City: <input type="text" id="cityField" value=""><br>
+        Suggestion: <span id="txtHint">Empty</span>
+        <input id="weatherButton" type="submit" value="Submit">
+    </form>
+    
+    <p>City</p>
+    <textare id="dispalyCity">No City</textare>
+    <p>Current Weather</p>
+    <div id="weather">No weather</div>
+    </body>
+</html
